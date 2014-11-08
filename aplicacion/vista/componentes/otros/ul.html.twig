@@ -1,0 +1,21 @@
+{% block beforehead %}{% endblock %}
+{% block body %}
+{% if config.type == "lista_a" %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<div class="list-group">
+{% endif %}
+{{ hijos | raw }}
+{% if config.seccion == null or config.seccion == "pie" %}
+</div>
+{% endif %}
+{% else %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<ul class="list-group">
+{% endif %}
+{{ hijos | raw }}
+{% if config.seccion == null or config.seccion == "pie" %}
+</ul>
+{% endif %}
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

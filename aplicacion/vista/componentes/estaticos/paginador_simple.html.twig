@@ -1,0 +1,10 @@
+{% block beforehead %}{% endblock %}
+{% block head %}<ul class="pager">{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+<li class="previous {{config.previous.state}}"><a href="{{config.previous.href}}">&larr; {{config.previous.label}}</a></li>
+<li class="next {{config.next.state}}"><a href="{{config.next.href}}">{{config.next.label}} &rarr;</a></li>
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}</ul>{% endblock %}
+{% block afterfoot %}{% endblock %}

@@ -1,0 +1,5 @@
+{
+    "ambiente": "desarrollo",
+    "template_dir": "vista",
+    "cache_dir": "cache"
+}

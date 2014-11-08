@@ -1,0 +1,15 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<ul class="nav navbar-nav">
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}   
+{{hijos | raw}}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}        
+{% if config.seccion == null or config.seccion == "pie" %}</ul>{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

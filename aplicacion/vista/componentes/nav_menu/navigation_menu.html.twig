@@ -1,0 +1,30 @@
+{% block beforehead %}
+{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+{% if config.type == "tabs" %}
+{% if config.justified == "si" %}
+<ul class="nav nav-tabs nav-justified">
+{% else %}
+<ul class="nav nav-tabs">
+{% endif %}
+{% else %}
+{% if config.stacked == "si" %}
+<ul class="nav nav-pills nav-stacked">
+{% elseif config.justified == "si" %}
+<ul class="nav nav-pills nav-justified">      
+{% else %}
+<ul class="nav nav-pills">        
+{% endif %}
+{% endif %}
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{{hijos | raw }}
+{% endblock %}
+{% block afterbody %} {% endblock %}
+{% block foot %}                     
+{% if config.seccion == null or config.seccion == "pie" %}</ul>{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

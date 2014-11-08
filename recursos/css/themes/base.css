@@ -1,0 +1,16 @@
+.simpleFooter {
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+.fixedFooter {
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+  padding-top: 15px;
+}

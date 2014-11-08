@@ -1,0 +1,21 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<li class="dropdown {{config.right}} {{config.state}}">
+<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+{{config.label}} <span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{{hijos | raw}}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}              
+{% if config.seccion == null or config.seccion == "pie" %}
+</ul></li>
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

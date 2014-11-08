@@ -1,0 +1,4 @@
+{% block body %}
+<div id="{{config.id}}" data-date="{{config.date}}" style="width: {{config.width}}px; height: {{config.height}}px;"></div>
+<script>$("#{{config.id}}").TimeCircles();</script>
+{% endblock block %}
