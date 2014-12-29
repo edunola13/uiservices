@@ -1,0 +1,14 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+<div class="jumbotron">
+<div class="container">
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+<h1>{{config.titulo}}</h1>
+<p>{{config.contenido}}</p>
+<p><a class="btn btn-primary btn-lg" role="button" href="{{config.href}}">{{config.label}}</a></p>
+{% endblock %}        
+{% block afterbody %}{% endblock %}
+{% block foot %}</div></div>{% endblock %}
+{% block afterfoot %}{% endblock %}

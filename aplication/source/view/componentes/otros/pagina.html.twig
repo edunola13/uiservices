@@ -1,0 +1,16 @@
+{% block beforehead %}{% endblock %}
+{% block head %}<li class="{{config.state}}"><a href="{{config.href}}">{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{% if config.first == "si" %}    
+&laquo;
+{% elseif config.last == "si" %}
+&raquo
+{% else %}
+{{config.label}}
+{% endif %}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}</a></li>{% endblock %}
+{% block afterfoot %}{% endblock %}
+    

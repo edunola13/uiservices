@@ -5,6 +5,6 @@
 </IfModule>
 
 RewriteEngine on 
-RewriteCond $1 !^(index.php|recursos) 
+RewriteCond $1 !^(index.php|resources) 
 RewriteRule ^(.*)$ /uiservices/index.php/$1 [L]
 ErrorDocument 404 /uiservices/index.php?error_apache_enola=404

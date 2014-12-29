@@ -1,0 +1,32 @@
+{% block body %}
+<script type="text/javascript">
+$(function () {
+    $('#chart-column-parsed').highcharts({
+        data: {
+            table: document.getElementById('{{config.tableId}}')
+        },
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '{{config.title}}'
+        },
+        yAxis: {
+            allowDecimals: true,
+            title: {
+                text: '{{config.units}}'
+            }
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.point.name + '</b><br/>' +
+                    this.series.name + ': ' + this.point.y + ' {{config.units}}';
+            }
+        }
+    });
+});
+</script>
+
+<div id="chart-column-parsed" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+{% endblock %}

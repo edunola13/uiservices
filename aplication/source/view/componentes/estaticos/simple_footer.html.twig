@@ -1,0 +1,17 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<div class="simpleFooter">
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{{hijos | raw }}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}
+{% if config.seccion == null or config.seccion == "pie" %}
+</div>
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

@@ -1,0 +1,18 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<div class="table-responsive">
+<table class="table table-striped table-bordered table-hover">
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{{ hijos | raw }}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}            
+{% if config.seccion == null or config.seccion == "pie" %}
+</table></div>
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

@@ -1,0 +1,13 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+<div class="form-group">
+<label for="text_area" class="col-md-2 control-label">{{config.label}}</label>
+<div class="col-md-10">
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+<textarea class="form-control" id="text_area" name="{{config.name}}" placeholder="{{config.placeholder}}" rows="{{config.rows}}">{{datos.value}}</textarea>
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}</div></div>{% endblock %}
+{% block afterfoot %}{% endblock %}

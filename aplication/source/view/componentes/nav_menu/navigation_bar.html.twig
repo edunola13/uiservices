@@ -1,0 +1,27 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<nav class="navbar navbar-default" role="navigation">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Desplegar navegación</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="{{config.href}}">{{config.logo}}</a>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse">    
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}      
+{{ hijos | raw }}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}      
+{% if config.seccion == null or config.seccion == "pie" %}         
+</div></nav>
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

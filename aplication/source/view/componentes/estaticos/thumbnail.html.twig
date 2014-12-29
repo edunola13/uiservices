@@ -1,0 +1,18 @@
+{% block beforehead %}{% endblock %}
+{% block head %}<div class="thumbnail">{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{% if config.src != null %}
+<img src="{{config.src}}" alt="{{config.alt}}">
+{% endif %}
+<div class="caption">
+<h3>{{config.titulo}}</h3>
+<p>{{config.contenido}}</p>
+<p>
+<a href="{{config.href}}" class="btn btn-primary" role="button">{{config.label}}</a>
+</p>
+</div>
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}</div>{% endblock %}
+{% block afterfoot %}{% endblock %}

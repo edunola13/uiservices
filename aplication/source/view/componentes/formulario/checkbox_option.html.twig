@@ -1,0 +1,25 @@
+{% block beforehead %}{% endblock %}
+{% block body %}
+{% if config.inline == "no" %}
+<div class="checkbox">
+<label for="checkboxes-{{config.num}}">
+{% if config.checked == "si" %}
+<input type="checkbox" name="{{config.name}}" id="checkboxes-{{config.num}}" value="{{datos.value}}" checked="checked">
+{% else %}
+<input type="checkbox" name="{{config.name}}" id="checkboxes-{{config.num}}" value="{{datos.value}}">
+{% endif %}
+{{config.label}}
+</label>
+</div>
+{% else %}
+<label class="checkbox-inline" for="checkboxes-{{config.num}}">
+{% if config.checked == "si" %}
+<input type="checkbox" name="{{config.name}}" id="checkboxes-{{config.num}}" value="{{datos.value}}" checked="checked">
+{% else %}
+<input type="checkbox" name="{{config.name}}" id="checkboxes-{{config.num}}" value="{{datos.value}}">
+{% endif %}
+{{config.label}}
+</label>
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}
