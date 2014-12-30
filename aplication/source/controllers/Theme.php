@@ -11,8 +11,11 @@
  * @author Usuario_2
  */
 class Theme extends En_Controller{
+    private $twig;
+    
     public function __construct() {
         parent::__construct();
+        $this->twig= new Twig();
     }
     
     public function doGet(){
@@ -20,7 +23,6 @@ class Theme extends En_Controller{
         if($nombre == NULL){
             $nombre= "base";
         }
-        
         echo $this->twig->render("theme/".$nombre.".html.twig");
     }
 }

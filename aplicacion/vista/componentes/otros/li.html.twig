@@ -1,9 +1,0 @@
-{% block beforehead %}{% endblock %}
-{% block body %}
-{% if config.type == "lista_a" %}
-<a href="{{config.href}}" class="list-group-item {{config.active}}"><span class="badge">{{config.badge}}</span>{{config.label}}</a>
-{% else %}
-<li class="list-group-item {{config.active}}"><span class="badge">{{config.badge}}</span>{{config.label}}</li>
-{% endif %}
-{% endblock %}
-{% block afterfoot %}{% endblock %}

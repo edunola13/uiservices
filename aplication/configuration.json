@@ -29,6 +29,6 @@
     },
                 
     "libraries": {
-        "twig": {"class": "Twig-1.16.0/Twig", "load_in": "controller, component"}
+        "twig": {"class": "Twig-1.16.0/Twig"}
     }
 }

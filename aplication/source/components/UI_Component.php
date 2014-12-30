@@ -12,11 +12,14 @@
  */
 class UI_Component extends En_Component{
     protected $config;
-    
+    private $twig;
+
+
     public function __construct() {
         parent::__construct();
         $this->config= file_get_contents(PATHAPP . CONFIGURATION . "components.json");
         $this->config= json_decode($this->config, TRUE);
+        $this->twig= Twig::getInstance();
     }
 
     /**
@@ -26,7 +29,7 @@ class UI_Component extends En_Component{
      * @param type $parametros
      * @return type 
      */
-    public function rendering($params = NULL) {      
+    public function rendering($params = NULL) {
         if(isset($params["componente"])){
             //Imprime el componente con la configuracion y componentes(hijos) correspondientes
             $componente= $params["componente"];
@@ -38,8 +41,8 @@ class UI_Component extends En_Component{
             if(isset($componente["datos"])){
                 $datos= $componente["datos"];
             }
-            $componentesHijos= $params["hijos"];
-            return $this->imprimir($componente["nombre"], $componentesHijos, $config, $datos);
+            $componentesHijos= $params["hijos"];            
+            return $this->imprimir($componente["nombre"], $componentesHijos, $config, $datos);            
         }
         else{
             //Devuelve la definicion del componente para las APIs de los lenguajes
@@ -67,14 +70,12 @@ class UI_Component extends En_Component{
      */
     protected function definicion($nombre){
         //Respuesta a devolver
-        $html= "";      
-
+        $html= "";
         //Cargo el archivo en un string
         $folderView= $this->config[$nombre];
         $file= file_get_contents(PATHAPP . "source/view/componentes/" . $folderView . '/' . $nombre . ".html.twig");
         //Analizo la herencia y armo los bloques en base a esta
         $bloques= $this->herencia($file);
-        
         //Recorro todos los bloques para armar la respuesta correcta
         foreach ($bloques as $cadena) {
             $i= 0;
@@ -116,6 +117,8 @@ class UI_Component extends En_Component{
                 $i++;
             }
         }
+        //Quito saltos de Lineas y demas
+        $html = preg_replace("/\r\n+|\r+|\n+|\t+/i", " ", $html);
         return $html;
     }
     

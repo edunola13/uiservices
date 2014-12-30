@@ -11,16 +11,18 @@
  * @author Usuario_2
  */
 class JavaScript extends En_Controller{
+    private $twig;
+    
     public function __construct() {
         parent::__construct();
+        $this->twig= new Twig();
     }    
     
     public function doGet(){
         $nombre= $this->request->param_get("nombre");        
         if($nombre == NULL){
             $nombre= "base";
-        }
-        
+        }        
         echo $this->twig->render("javascript/".$nombre.".html.twig");
     }
 }

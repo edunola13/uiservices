@@ -58,7 +58,7 @@ class ComponenteService extends En_Controller{
             $componentesHijos= NULL;
             //Para cada componente analizo si tiene mas componentes
             if(isset($componente["componentes"])){
-                //Si tiene mas componentes los llamopara que me devuelva la rta
+                //Si tiene mas componentes los llamo para que me devuelva la rta
                 $componentesHijos= $this->armarComponentes($componente["componentes"]);
             }
             //Ejecuto el componente actual para que devuelva su rta con la rta de sus componentes

@@ -47,7 +47,10 @@ class En_Controller extends Enola implements Controller{
     /**
      * Funcion que es llamada cuando el metodo HTTP es OPTIONS
      */
-    public function doOptions(){        
+    public function doOptions(){
+        header("Access-Control-Allow-Origin: *");
+        header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+        header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
     }
     /**
      * Funcion que es llamada cuando el metodo HTTP es CONNECT
