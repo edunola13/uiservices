@@ -1,0 +1,29 @@
+[2015-01-02 18:11:33.000000 127.0.0.1  - Error Fatal - Parse - Strict ] syntax error, unexpected '}', expecting ',' or ';'
+----------\n[2015-01-02 18:12:02.000000 127.0.0.1  - Error Fatal - Parse - Strict ] syntax error, unexpected '}', expecting ',' or ';'
+----------\n[2015-01-02 18:18:22.000000 127.0.0.1  - Error Fatal - Parse - Strict ] syntax error, unexpected '}', expecting ',' or ';'
+----------\n[2015-01-02 18:19:57.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function componen()
+----------\n[2015-01-02 18:20:33.000000 127.0.0.1  - Unknown ] Undefined variable: nombre2
+----------\n[2015-01-02 18:21:13.000000 127.0.0.1  - Level Error: 8 ] Undefined variable: nombre2
+----------\n[2015-01-02 18:26:27.000000 127.0.0.1  - Error Fatal - Parse - Strict ] syntax error, unexpected '}', expecting ',' or ';'
+----------\n[2015-01-02 18:27:17.000000 127.0.0.1  - Error Fatal - Parse - Strict ] syntax error, unexpected '}', expecting ',' or ';'
+----------\n[2015-01-02 18:27:21.000000 127.0.0.1  - Error Fatal - Parse - Strict ] syntax error, unexpected '}', expecting ',' or ';'
+----------\n[2015-01-02 18:29:51.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:35:58.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:37:39.000000 127.0.0.1  - Error Fatal - Parse - Strict ] syntax error, unexpected '}', expecting ',' or ';'
+----------\n[2015-01-02 18:37:39.000000 127.0.0.1  - Error Fatal - Parse - Strict ] syntax error, unexpected '}', expecting ',' or ';'
+----------\n[2015-01-02 18:37:45.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:37:45.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:37:47.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:37:47.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:38:05.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:38:07.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:38:30.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:38:43.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:39:14.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:39:32.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:39:47.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:39:58.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:40:01.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:40:12.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-02 18:40:18.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n
