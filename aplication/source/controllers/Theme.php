@@ -19,6 +19,10 @@ class Theme extends En_Controller{
     }
     
     public function doGet(){
+        //Modifico el Header
+        header("Access-Control-Allow-Origin: *");
+        header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+        
         $nombre= $this->request->param_get("nombre");
         if($nombre == NULL){
             $nombre= "base";
