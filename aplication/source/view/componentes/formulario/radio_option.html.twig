@@ -2,21 +2,21 @@
 {% block body %}
 {% if config.inline == "no" %}
 <div class="radio">
-<label for="radios-{{config.num}}">
+<label for="{{config.id}}">
 {% if config.checked == "si" %}
-<input type="radio" name="{{config.name}}" id="radios-{{config.num}}" value="{{datos.value}}" checked="checked">
+<input type="radio" name="{{config.name}}" id="{{config.id}}" value="{{datos.value}}" checked="checked">
 {% else %}
-<input type="radio" name="{{config.name}}" id="radios-{{config.num}}" value="{{datos.value}}">
+<input type="radio" name="{{config.name}}" id="{{config.id}}" value="{{datos.value}}">
 {% endif %}
 {{config.label}}
 </label>
 </div>
 {% else %}   
-<label class="radio-inline" for="radios-{{config.num}}">
+<label class="radio-inline" for="{{config.id}}">
 {% if config.checked == "si" %}
-<input type="radio" name="{{config.name}}" id="radios-{{config.num}}" value="{{datos.value}}" checked="checked">
+<input type="radio" name="{{config.name}}" id="{{config.id}}" value="{{datos.value}}" checked="checked">
 {% else %}
-<input type="radio" name="{{config.name}}" id="radios-{{config.num}}" value="{{datos.value}}">
+<input type="radio" name="{{config.name}}" id="{{config.id}}" value="{{datos.value}}">
 {% endif %}
 {{config.label}}
 </label>

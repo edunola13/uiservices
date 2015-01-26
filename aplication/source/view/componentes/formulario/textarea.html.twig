@@ -6,7 +6,7 @@
 {% endblock %}
 {% block beforebody %}{% endblock %}
 {% block body %}
-<textarea class="form-control" id="text_area" name="{{config.name}}" placeholder="{{config.placeholder}}" rows="{{config.rows}}">{{datos.value}}</textarea>
+<textarea class="form-control" id="{{config.id}}" name="{{config.name}}" placeholder="{{config.placeholder}}" rows="{{config.rows}}">{{datos.value}}</textarea>
 {% endblock %}
 {% block afterbody %}{% endblock %}
 {% block foot %}</div></div>{% endblock %}

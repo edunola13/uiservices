@@ -1,16 +1,14 @@
 {% block beforehead %}{% endblock %}
 {% block head %}
-{% if config.typeError == null or config.message %}<div class="form-group">{% else %}<div class="form-group has-{{config.typeError}}">{% endif %}
-<label for="{{config.id}}" class="col-md-2 control-label">{{config.label}}</label>
-<div class="col-md-10">
+{% if config.typeError == null %}<div class="form-group">{% else %}<div class="form-group has-{{config.typeError}}">{% endif %}
+<label for="{{config.id}}" class="control-label">{{config.label}}</label>
 {% endblock %}
 {% block beforebody %}{% endblock %}
 {% block body %}
 <input class="form-control" type="{{config.type}}" id="{{config.id}}" name="{{config.name}}" placeholder="{{config.placeholder}}" value="{{datos.value}}">
-{% if config.message != null %}<span class="help-block">{{config.message}}</span>{% endif %}
 {% endblock %}
 {% block afterbody %}{% endblock %}
 {% block foot %}   
-</div></div>
+</div>
 {% endblock %}
 {% block afterfoot %}{% endblock %}
