@@ -26,4 +26,6 @@
 ----------\n[2015-01-02 18:40:01.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
 ----------\n[2015-01-02 18:40:12.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
 ----------\n[2015-01-02 18:40:18.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
+----------\n[2015-01-27 20:38:31.000000 127.0.0.1  - Unable to find template "componentes/form_inline.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
+----------\n[2015-01-27 20:41:12.000000 127.0.0.1  - Unable to find template "componentes/form.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
 ----------\n

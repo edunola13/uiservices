@@ -1,6 +1,6 @@
 {% block beforehead %}{% endblock %}
 {% block head %}
-{% if config.typeError == null or config.message %}<div class="form-group">{% else %}<div class="form-group has-{{config.typeError}}">{% endif %}
+{% if config.typeError == null or config.message == null %}<div class="form-group">{% else %}<div class="form-group has-{{config.typeError}}">{% endif %}
 <label for="{{config.id}}" class="col-md-2 control-label">{{config.label}}</label>
 <div class="col-md-10">
 {% endblock %}

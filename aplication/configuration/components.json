@@ -13,6 +13,8 @@
         "button":"formulario",
         "botonera":"formulario",
         
+        "form_inline":"formulario",
+        
         "drop_down_menu":"nav_menu",
         "menu_item":"nav_menu",
         "navigation_menu":"nav_menu",
