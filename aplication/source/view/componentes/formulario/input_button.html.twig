@@ -4,9 +4,9 @@
 {% endblock %}
 {% block beforebody %}{% endblock %}
 {% block body %}
-{% if config.buttonAfter == 'si' %}<input class="form-control input-{{config.inputSize}}" type="{{config.type}}" id="{{config.id}}" name="{{config.name}}" placeholder="{{config.placeholder}}" value="{{datos.value}}">{% endif %}
-<span class="input-group-btn"><button class="btn btn-{{config.styleButton}} btn-{{config.buttonSize}}" type="button" id="{{config.idButton}}" onclick="{{config.onclick}}">{{config.labelButton}}</button></span>
-{% if config.buttonAfter == 'no' %}<input class="form-control input-{{config.inputSize}}" type="{{config.type}}" id="{{config.id}}" name="{{config.name}}" placeholder="{{config.placeholder}}" value="{{datos.value}}">{% endif %}
+{% if config.buttonAfter == "si" %}<input class="form-control input-{{config.size}}" type="{{config.inputType}}" id="{{config.inputId}}" name="{{config.name}}" placeholder="{{config.placeholder}}" value="{{datos.value}}">{% endif %}
+<span class="input-group-btn"><button class="btn btn-{{config.buttonStyle}} btn-{{config.size}}" type="button" id="{{config.buttonId}}" onclick="{{config.onclick}}">{{config.labelButton}}</button></span>
+{% if config.buttonAfter == "no" %}<input class="form-control input-{{config.size}}" type="{{config.inputType}}" id="{{config.inputId}}" name="{{config.name}}" placeholder="{{config.placeholder}}" value="{{datos.value}}">{% endif %}
 {% endblock %}
 {% block afterbody %}{% endblock %}
 {% block foot %}   

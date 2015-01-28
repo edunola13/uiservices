@@ -2,7 +2,7 @@
 {% block head %}
 {% if config.seccion == null or config.seccion == "cabecera" %}
 {% if config.typeError == null %}<div class="form-group">{% else %}<div class="form-group has-{{config.typeError}}">{% endif %}
-<label class="col-md-2 control-label input-{{config.inputSize}}" for="checkboxes">{{config.label}}</label>
+<label class="col-md-2 control-label input-{{config.size}}" for="checkboxes">{{config.label}}</label>
 <div class="col-md-10">
 {% endif %}
 {% endblock %}

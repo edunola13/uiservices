@@ -2,10 +2,10 @@
 {% block head %}
 {% if config.seccion == null or config.seccion == "cabecera" %}
 <div class="dropdown {{config.right}}">
-<button class="btn btn-{{config.style}} btn-{{config.buttonSize}} dropdown-toggle" type="button" data-toggle="dropdown">
-{{config.label}}<span class="caret"></span>
+<button class="btn btn-{{config.style}} btn-{{config.size}} dropdown-toggle" type="button" data-toggle="dropdown">
+{{config.label}} <span class="caret"></span>
 </button>
-<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+<ul class="dropdown-menu" role="menu">
 {% endif %}
 {% endblock %}
 {% block beforebody %}{% endblock %}

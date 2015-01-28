@@ -1,7 +1,7 @@
 {% block beforehead %}{% endblock %}
 {% block head %}
 {% if config.seccion == null or config.seccion == "cabecera" %}
-{% if config.vertical == 'si' %}<div class="btn-group btn-group-{{config.size}}" role="group" aria-label="{{config.label}}">
+{% if config.vertical == "no" %}<div class="btn-group btn-group-{{config.size}}" role="group" aria-label="{{config.label}}">
 {% else %}<div class="btn-group btn-group-vertical btn-group-{{config.size}}" role="group" aria-label="{{config.label}}">{% endif %}
 {% endif %}
 {% endblock %}
