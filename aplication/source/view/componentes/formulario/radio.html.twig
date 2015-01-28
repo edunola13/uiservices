@@ -1,8 +1,8 @@
 {% block beforehead %}{% endblock %}
 {% block head %}
 {% if config.seccion == null or config.seccion == "cabecera" %}
-{% if config.typeError == null or config.message == null %}<div class="form-group">{% else %}<div class="form-group has-{{config.typeError}}">{% endif %}
-<label class="col-md-2 control-label" for="radios">{{config.label}}</label>
+{% if config.typeError == null %}<div class="form-group">{% else %}<div class="form-group has-{{config.typeError}}">{% endif %}
+<label class="col-md-2 control-label input-{{config.inputSize}}" for="radios">{{config.label}}</label>
 <div class="col-md-10">  
 {% endif %}
 {% endblock %}

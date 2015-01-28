@@ -2,7 +2,7 @@
 {% block head %}
 {% if config.seccion == null or config.seccion == "cabecera" %}
 <div class="dropdown {{config.right}}">
-<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+<button class="btn btn-{{config.style}} btn-{{config.buttonSize}} dropdown-toggle" type="button" data-toggle="dropdown">
 {{config.label}}<span class="caret"></span>
 </button>
 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">

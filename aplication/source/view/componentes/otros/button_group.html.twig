@@ -1,0 +1,15 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+{% if config.vertical == 'si' %}<div class="btn-group btn-group-{{config.size}}" role="group" aria-label="{{config.label}}">
+{% else %}<div class="btn-group btn-group-vertical btn-group-{{config.size}}" role="group" aria-label="{{config.label}}">{% endif %}
+{% endif %}
+{% endblock %}
+{% block body %}
+{{hijos | raw }}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}        
+{% if config.seccion == null or config.seccion == "pie" %}</div>{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

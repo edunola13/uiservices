@@ -2,9 +2,9 @@
 {% block head %}
 {% if config.seccion == null or config.seccion == "cabecera" %}
 {% if config.multiple == "no" %}
-<select id="{{config.id}}" name="{{config.name}}" class="form-control">
+<select id="{{config.id}}" name="{{config.name}}" class="form-control input-{{config.inputSize}}">
 {% else %}
-<select id="{{config.id}}" name="{{config.name}}" class="form-control" multiple="multiple">
+<select id="{{config.id}}" name="{{config.name}}" class="form-control input-{{config.inputSize}}" multiple="multiple">
 {% endif %}           
 {% endif %}
 {% endblock %}

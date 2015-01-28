@@ -2,12 +2,12 @@
 {% block head %}
 {% if config.seccion == null or config.seccion == "cabecera" %}
 {% if config.typeError == null or config.message == null %}<div class="form-group">{% else %}<div class="form-group has-{{config.typeError}}">{% endif %}
-<label class="col-md-2 control-label" for="selectbasic">{{config.label}}</label>
+<label class="col-md-2 control-label input-{{config.inputSize}}" for="selectbasic">{{config.label}}</label>
 <div class="col-md-5">
 {% if config.multiple == "no" %}
-<select id="{{config.id}}" name="{{config.name}}" class="form-control">
+<select id="{{config.id}}" name="{{config.name}}" class="form-control input-{{config.inputSize}}">
 {% else %}
-<select id="{{config.id}}" name="{{config.name}}" class="form-control" multiple="multiple">
+<select id="{{config.id}}" name="{{config.name}}" class="form-control input-{{config.inputSize}}" multiple="multiple">
 {% endif %}           
 {% endif %}
 {% endblock %}

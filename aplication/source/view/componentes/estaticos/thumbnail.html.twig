@@ -8,9 +8,7 @@
 <div class="caption">
 <h3>{{config.titulo}}</h3>
 <p>{{config.contenido}}</p>
-<p>
-<a href="{{config.href}}" class="btn btn-primary" role="button">{{config.label}}</a>
-</p>
+<p><a href="{{config.href}}" class="btn btn-{{config.buttonStyle}} btn-{{config.buttonSize}}" role="button">{{config.label}}</a></p>
 </div>
 {% endblock %}
 {% block afterbody %}{% endblock %}
