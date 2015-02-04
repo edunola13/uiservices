@@ -1,0 +1,6 @@
+{
+        "base": "tablero",
+        
+        "column-parsed":"charts",
+        "date_countdown":"charts"
+}

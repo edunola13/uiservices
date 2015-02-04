@@ -28,4 +28,12 @@
 ----------\n[2015-01-02 18:40:18.000000 127.0.0.1  - Error Fatal - Parse - Strict ] Call to undefined function components()
 ----------\n[2015-01-27 20:38:31.000000 127.0.0.1  - Unable to find template "componentes/form_inline.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
 ----------\n[2015-01-27 20:41:12.000000 127.0.0.1  - Unable to find template "componentes/form.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
+----------\n[2015-02-04 14:34:54.000000 127.0.0.1  - Unable to find template "componentes/formulario.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
+----------\n[2015-02-04 14:46:22.000000 127.0.0.1  - Unable to find template "componentes/formulario.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
+----------\n[2015-02-04 14:46:39.000000 127.0.0.1  - Unable to find template "componentes/formulario.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
+----------\n[2015-02-04 14:47:17.000000 127.0.0.1  - Unable to find template "componentes/select_option.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
+----------\n[2015-02-04 14:49:08.000000 127.0.0.1  - Unable to find template "componentes/select_option.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
+----------\n[2015-02-04 14:49:52.000000 127.0.0.1  - Unable to find template "componentes/select_option.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
+----------\n[2015-02-04 14:52:35.000000 127.0.0.1  - Error Fatal - Parse - Strict ] syntax error, unexpected '}'
+----------\n[2015-02-04 15:09:59.000000 127.0.0.1  - Unable to find template "theme/bootstrap3/tablero.html.twig" (looked into: C:\wamp\www\uiservices\aplication/source/view). ] general_error
 ----------\n

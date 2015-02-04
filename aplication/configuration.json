@@ -8,9 +8,11 @@
     "controllers": {
         "index": {"class": "Index", "url": ""},
         "componente": {"class": "ComponenteService", "url": "componente"},
+        "componenteDefinition": {"class": "ComponenteDefinition", "url": "componenteDefinition"},
         "theme": {"class": "Theme", "url": "theme"},
         "java-script": {"class": "JavaScript", "url": "javascript"},
-        "componenteDefinition": {"class": "ComponenteDefinition", "url": "componenteDefinition"}
+        "test": {"class": "Test", "url": "test"}
+        
     },
 
     "filters": {     

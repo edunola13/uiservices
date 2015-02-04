@@ -1,10 +1,4 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of Componente
  *
@@ -25,6 +19,14 @@ class ComponenteService extends En_Controller{
         $jsonBody = @file_get_contents('php://input');        
         //Consigo el archivo JSON de la peticion y lo decodifico a array
         $componente= json_decode($jsonBody, TRUE);
+        /**
+         * Seteo el proyecto 
+         */
+        $proyecto= 'bootstrap3';
+        if(isset($componente["proyecto"])){
+            $proyecto= $componente["proyecto"];
+        }
+        define('PROYECTO_UI', $proyecto);
         /**
          * Ahora llamo a la funcion que en base al archivo JSON arma la RTA de los componentes. Esta ira ejecutando
          * todos los componentes antes ejecutando los sub componentes de los componentes y asi recursivamente.

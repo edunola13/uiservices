@@ -11,14 +11,16 @@
  * @author Usuario_2
  */
 class UI_Component extends En_Component{
-    protected $config;
+    protected static $config;
     private $twig;
 
 
     public function __construct() {
         parent::__construct();
-        $this->config= file_get_contents(PATHAPP . CONFIGURATION . "components.json");
-        $this->config= json_decode($this->config, TRUE);
+        if(UI_Component::$config == NULL){
+            $config= file_get_contents(PATHAPP . CONFIGURATION . PROYECTO_UI . '.json');
+            UI_Component::$config= json_decode($config, TRUE);
+        }
         $this->twig= Twig::getInstance();
     }
 
@@ -59,8 +61,9 @@ class UI_Component extends En_Component{
      * @return type 
      */
     protected function imprimir($nombre, $hijos, $config, $datos){
-        $folderView= $this->config[$nombre];
-        return $this->twig->render("componentes/" . $folderView . '/' . $nombre . ".html.twig", array("hijos" => $hijos, "config" => $config, "datos" => $datos));
+        $folderView= UI_Component::$config[$nombre];
+        $base= UI_Component::$config['base'];
+        return $this->twig->render("componentes/" . $base . '/' . $folderView . '/' . $nombre . ".html.twig", array("hijos" => $hijos, "config" => $config, "datos" => $datos));
     }
     
     /**
@@ -72,8 +75,9 @@ class UI_Component extends En_Component{
         //Respuesta a devolver
         $html= "";
         //Cargo el archivo en un string
-        $folderView= $this->config[$nombre];
-        $file= file_get_contents(PATHAPP . "source/view/componentes/" . $folderView . '/' . $nombre . ".html.twig");
+        $folderView= UI_Component::$config[$nombre];
+        $base= UI_Component::$config['base'];
+        $file= file_get_contents(PATHAPP . "source/view/componentes/" . $base . '/' . $folderView . '/' . $nombre . ".html.twig");
         //Analizo la herencia y armo los bloques en base a esta
         $bloques= $this->herencia($file);
         //Recorro todos los bloques para armar la respuesta correcta

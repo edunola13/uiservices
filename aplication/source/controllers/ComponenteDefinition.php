@@ -1,10 +1,4 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of Prueba
  *
@@ -22,6 +16,15 @@ class ComponenteDefinition extends En_Controller{
         //Modifico el Header
         header("Access-Control-Allow-Origin: *");
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+        
+        /**
+         * Seteo el proyecto 
+         */
+        $proyecto= 'bootstrap3';
+        if($this->request->param_get("proyecto") != NULL){
+            $proyecto= $this->request->param_get("proyecto");
+        }
+        define('PROYECTO_UI', $proyecto);
         
         //Agarro el nombre desde un parametro GET
         $nombre= $this->request->param_get("nombre");
