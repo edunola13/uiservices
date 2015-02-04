@@ -11,8 +11,7 @@
         "componenteDefinition": {"class": "ComponenteDefinition", "url": "componenteDefinition"},
         "theme": {"class": "Theme", "url": "theme"},
         "java-script": {"class": "JavaScript", "url": "javascript"},
-        "test": {"class": "Test", "url": "test"}
-        
+        "test": {"class": "Test", "url": "test"}        
     },
 
     "filters": {     
