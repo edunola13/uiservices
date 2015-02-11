@@ -1,0 +1,26 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<div class="carousel slide" data-ride="carousel">
+<ol class="carousel-indicators">
+</ol>
+<div class="carousel-inner" role="listbox"> 
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}      
+{{ hijos | raw }}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}      
+{% if config.seccion == null or config.seccion == "pie" %}         
+</div><!-- Controls -->
+<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+<span class="sr-only">{{config.labelPrevious}}</span></a>
+<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+<span class="sr-only">{{config.labelNext}}</span></a></div>
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

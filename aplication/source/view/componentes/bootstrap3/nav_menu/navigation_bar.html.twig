@@ -1,7 +1,7 @@
 {% block beforehead %}{% endblock %}
 {% block head %}
 {% if config.seccion == null or config.seccion == "cabecera" %}
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default {{config.position}} {{config.inverse}}" role="navigation">
 <div class="navbar-header">
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
 <span class="sr-only">Desplegar navegación</span>

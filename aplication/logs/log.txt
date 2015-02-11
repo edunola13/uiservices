@@ -1,3 +1,4 @@
 [2015-02-04 18:21:23.000000 127.0.0.1  - Unknown ] file_get_contents(C:\wamp\www\uiservices\aplication/source/view/componentes/formulario/button.html.twig) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory
 ----------\n[2015-02-04 18:23:37.000000 127.0.0.1  - Unknown ] file_get_contents(C:\wamp\www\uiservices\aplication/source/view/componentes/formulario/button.html.twig) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: No such file or directory
+----------\n[2015-02-11 13:51:26.000000 127.0.0.1  - Error Fatal - Parse - Strict ] syntax error, unexpected T_DOUBLE_ARROW
 ----------\n
