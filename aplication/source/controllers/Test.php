@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of Test
- *
- * @author Usuario_2
- */
 class Test extends En_Controller{    
     protected $twig;
     protected $hijos;

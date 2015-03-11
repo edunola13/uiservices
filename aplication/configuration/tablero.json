@@ -1,6 +1,13 @@
 {
         "base": "tablero",
-        
-        "column-parsed":"charts",
-        "date_countdown":"charts"
+        "components":{
+            "column-parsed":"charts",
+            "date_countdown":"charts"
+        },
+        "javascripts":{
+            "tablero": ""
+        },
+        "themes":{
+            "tablero": ""
+        }
 }

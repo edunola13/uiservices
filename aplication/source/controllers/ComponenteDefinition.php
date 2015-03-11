@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of Prueba
- *
- * @author Usuario_2
- */
 class ComponenteDefinition extends En_Controller{    
     public function __construct() {
         parent::__construct();

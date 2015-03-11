@@ -1,0 +1,12 @@
+{
+    "bootstrap3": {
+        "config": "bootstrap3",
+        "environment": "production",
+        "version": "1.0"
+    },
+    "tablero": {
+        "config": "tablero",
+        "environment": "development",
+        "version": "1.0"
+    }
+}

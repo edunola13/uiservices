@@ -1,9 +1,4 @@
 <?php
-/**
- * Description of Componente
- *
- * @author Usuario_2
- */
 class ComponenteService extends En_Controller{
     
     public function __construct() {
