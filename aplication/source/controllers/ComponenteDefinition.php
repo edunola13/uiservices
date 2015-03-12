@@ -12,14 +12,13 @@ class ComponenteDefinition extends En_Controller{
         header("Access-Control-Allow-Origin: *");
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
         
-        /**
-         * Seteo el proyecto 
-         */
-        $proyecto= 'bootstrap3';
+        //Cargo la configuracion y la configuracion para el proyecto default o sleccionado
+        $config= Config::getInstance();
+        $proyecto= $config->defaultProject();
         if($this->request->param_get("proyecto") != NULL){
             $proyecto= $this->request->param_get("proyecto");
         }
-        define('PROYECTO_UI', $proyecto);
+        $config->loadProject($proyecto);
         
         //Agarro el nombre desde un parametro GET
         $nombre= $this->request->param_get("nombre");

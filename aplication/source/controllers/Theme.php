@@ -12,15 +12,26 @@ class Theme extends En_Controller{
         header("Access-Control-Allow-Origin: *");
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
         
-        $proyecto= 'bootstrap3';
+        //Cargo la configuracion y la configuracion para el proyecto default o sleccionado
+        $config= Config::getInstance();
+        $proyecto= $config->defaultProject();
         if($this->request->param_get("proyecto") != NULL){
             $proyecto= $this->request->param_get("proyecto");
-        } 
+        }
+        $config->loadProject($proyecto);
+        
         $nombre= $this->request->param_get("nombre");
         if($nombre == NULL){
             $nombre= "base";
         }
-        echo $this->twig->render("theme/".$proyecto.'/'.$nombre.".html.twig");
+        
+        $project= $config->actualProjectConfig();
+        $folderView= $project['themes'][$nombre] . '/';
+        //Le quito el "/" en caso de que no haya carpeta
+        $folderView= ltrim($folderView, '/');
+        $base= $project['base'];
+        
+        echo $this->twig->render("theme/".$base.'/'.$folderView.$nombre.".html.twig");
     }
 }
 

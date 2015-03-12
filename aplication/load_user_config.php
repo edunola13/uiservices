@@ -24,4 +24,9 @@
     }    
     set_error_handler('_error_handler2');
     register_shutdown_function('_shutdown2');
+    
+/*
+ * Registro la clase Config
+ */
+    import_aplication_file('source/helperClass/Config');
 ?>

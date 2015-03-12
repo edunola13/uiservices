@@ -11,16 +11,13 @@
  * @author Usuario_2
  */
 class UI_Component extends En_Component{
-    protected static $config;
+    private $config;
     private $twig;
 
 
     public function __construct() {
         parent::__construct();
-        if(UI_Component::$config == NULL){
-            $config= file_get_contents(PATHAPP . CONFIGURATION . PROYECTO_UI . '.json');
-            UI_Component::$config= json_decode($config, TRUE);
-        }
+        $this->config= Config::getInstance();        
         $this->twig= Twig::getInstance();
     }
 
@@ -61,9 +58,12 @@ class UI_Component extends En_Component{
      * @return type 
      */
     protected function imprimir($nombre, $hijos, $config, $datos){
-        $folderView= UI_Component::$config[$nombre];
-        $base= UI_Component::$config['base'];
-        return $this->twig->render("componentes/" . $base . '/' . $folderView . '/' . $nombre . ".html.twig", array("hijos" => $hijos, "config" => $config, "datos" => $datos));
+        $project= $this->config->actualProjectConfig();
+        $folderView= $project['components'][$nombre] . '/';
+        //Le quito el "/" en caso de que no haya carpeta
+        $folderView= ltrim($folderView, '/');
+        $base= $project['base'];
+        return $this->twig->render("componentes/" . $base . '/' . $folderView . $nombre . ".html.twig", array("hijos" => $hijos, "config" => $config, "datos" => $datos));
     }
     
     /**
@@ -75,8 +75,9 @@ class UI_Component extends En_Component{
         //Respuesta a devolver
         $html= "";
         //Cargo el archivo en un string
-        $folderView= UI_Component::$config[$nombre];
-        $base= UI_Component::$config['base'];
+        $project= $this->config->actualProjectConfig();
+        $folderView= $project['components'][$nombre];
+        $base= $project['base'];
         $file= file_get_contents(PATHAPP . "source/view/componentes/" . $base . '/' . $folderView . '/' . $nombre . ".html.twig");
         //Analizo la herencia y armo los bloques en base a esta
         $bloques= $this->herencia($file);

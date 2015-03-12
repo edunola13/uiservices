@@ -1,4 +1,5 @@
 {
+    "default": "bootstrap3",
     "bootstrap3": {
         "config": "bootstrap3",
         "environment": "production",

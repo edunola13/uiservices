@@ -1,24 +1,64 @@
 <?php
 class ServerDefinition extends En_Controller{
+    protected $tiwg;
+    
     public function __construct() {
         parent::__construct();
+        $this->twig= new Twig();
     }
     
     /**
      * Devuelve la definicion del servidor. Digamos todos sus componentes
      */
     public function doGet(){
-        //Recorro todos los proyectos
-            //Con el archivo de configuracion recorro todos los componentes del proyecto
-                //Voy guardando con clave-valor lo que retorna la definicion del componente
-            //Con el archivo de configuracion recorro todos los javascript del proyecto
-                //Voy guardando lo que devuelva el twig del javascript
-            //Con el archivo de configuracion recorro todos los themes del proyecto
-                //Voy guardando lo que devuelva el twig del theme
+        $config= Config::getInstance();
+        $config->loadAllProjects();
+        //Definicion del servidor
+        $definition= "";
         
-        //clave de cada componente-javascript-theme: proyecto_(component, javascript o theme)_nombre
+        foreach ($config->projects as $projectName => $datos) {
+            $config->setActualProject($projectName);
+            $projectConfig= $config->actualProjectConfig();
+            foreach($projectConfig['components'] as $name => $folder){
+                $def= component('ui_component', array("nombre" => $name));
+                //Los saltos de linea ya lo realizo el componente
+                $definition.= $projectName .'&component&'. $name . '=' . $def . PHP_EOL;
+            }
+            
+            foreach($projectConfig['javascripts'] as $name => $folder){
+                $folder.= '/';
+                $folder= ltrim($folder, '/');
+                $def= $this->twig->render("javascript/".$projectConfig['base'].'/'.$folder.$name.".html.twig");
+                //Quito los saltos de linea                
+                $def = preg_replace("/\r\n+|\r+|\n+|\t+/i", " ", $def);
+                $definition.= $projectName .'&javascript&'. $name . '=' . $def . PHP_EOL;
+            }
+            
+            foreach($projectConfig['themes'] as $name => $folder){
+                $folder.= '/';
+                $folder= ltrim($folder, '/');
+                $def= $this->twig->render("theme/".$projectConfig['base'].'/'.$folder.$name.".html.twig");
+                //Quito los saltos de linea                
+                $def = preg_replace("/\r\n+|\r+|\n+|\t+/i", " ", $def);
+                $definition.= $projectName .'&theme&'. $name . '=' . $def . PHP_EOL;
+            }
+        }
         
-        //Obligar descarga y segun el tipo agregar extension .txt o .properties
+        $api= $this->request->param_get('api');
+        $fileName= 'ServerDefinition-' . date('Y-m-d');
+        if($api == 'PHP'){
+            $fileName.= '.txt';
+        }else{
+            $fileName.= '.properties';
+        }
+        
+        header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=$fileName");
+        header("Content-Type: application/x-download; "); 
+        header("Content-Transfer-Encoding: binary");
+        
+        echo $definition;
     }
 }
 

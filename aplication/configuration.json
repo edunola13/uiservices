@@ -11,6 +11,7 @@
         "componenteDefinition": {"class": "ComponenteDefinition", "url": "componenteDefinition"},
         "theme": {"class": "Theme", "url": "theme"},
         "java-script": {"class": "JavaScript", "url": "javascript"},
+        "serverDefinition": {"class": "ServerDefinition", "url": "serverDefinition"},
         "test": {"class": "Test", "url": "test"}        
     },
 
