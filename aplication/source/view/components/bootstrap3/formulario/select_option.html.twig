@@ -1,0 +1,15 @@
+{% block beforehead %}{% endblock %}
+{% block head %}   
+{% if config.checked == "si" %}
+<option value="{{config.value}}" selected>
+{% else %}
+<option value="{{config.value}}">
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}        
+{{config.label}}
+{% endblock %}
+{% block afterbody %} {% endblock %}
+{% block foot %}</option>{% endblock %}
+{% block afterfoot %}{% endblock %}

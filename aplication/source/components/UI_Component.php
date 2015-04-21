@@ -36,12 +36,8 @@ class UI_Component extends En_Component{
             if(isset($componente["configuracion"])){
                 $config= $componente["configuracion"];
             }
-            $datos=  NULL;
-            if(isset($componente["datos"])){
-                $datos= $componente["datos"];
-            }
             $componentesHijos= $params["hijos"];            
-            return $this->imprimir($componente["nombre"], $componentesHijos, $config, $datos);            
+            return $this->imprimir($componente["nombre"], $componentesHijos, $config);            
         }
         else{
             //Devuelve la definicion del componente para las APIs de los lenguajes
@@ -57,13 +53,13 @@ class UI_Component extends En_Component{
      * @param type $datos
      * @return type 
      */
-    protected function imprimir($nombre, $hijos, $config, $datos){
+    protected function imprimir($nombre, $hijos, $config){
         $project= $this->config->actualProjectConfig();
         $folderView= $project['components'][$nombre] . '/';
         //Le quito el "/" en caso de que no haya carpeta
         $folderView= ltrim($folderView, '/');
         $base= $project['base'];
-        return $this->twig->render("componentes/" . $base . '/' . $folderView . $nombre . ".html.twig", array("hijos" => $hijos, "config" => $config, "datos" => $datos));
+        return $this->twig->render("components/" . $base . '/' . $folderView . $nombre . ".html.twig", array("childComponents" => $hijos, "config" => $config));
     }
     
     /**
@@ -78,7 +74,7 @@ class UI_Component extends En_Component{
         $project= $this->config->actualProjectConfig();
         $folderView= $project['components'][$nombre];
         $base= $project['base'];
-        $file= file_get_contents(PATHAPP . "source/view/componentes/" . $base . '/' . $folderView . '/' . $nombre . ".html.twig");
+        $file= file_get_contents(PATHAPP . "source/view/components/" . $base . '/' . $folderView . '/' . $nombre . ".html.twig");
         //Analizo la herencia y armo los bloques en base a esta
         $bloques= $this->herencia($file);
         //Recorro todos los bloques para armar la respuesta correcta
@@ -95,8 +91,8 @@ class UI_Component extends En_Component{
                     //Busca el primer caracter que no sea vacio
                     $i= $this->saltarBlancos($cadena, $i);
                     //Si encuentro la variable "hijos" la reemplazo por "components"
-                    if($cadena[$i] == "h"){
-                        $i= $this->buscarPalabra($cadena, "hijos", $i);
+                    if($cadena[$i] == "c"){
+                        $i= $this->buscarPalabra($cadena, "childComponents", $i);
                         if($i !== FALSE && ($cadena[$i] == " " || $cadena[$i] == "|")){
                             $i++;
                             $i= $this->buscarYsaltar($cadena, $i, "}");
@@ -379,7 +375,7 @@ class UI_Component extends En_Component{
 //                    //Busca el primer caracter que no sea vacio
 //                    $i= $this->saltarBlancos($file, $i);
 //                    if($file[$i] == "h"){
-//                        $i= $this->buscarPalabra($file, "hijos", $i);
+//                        $i= $this->buscarPalabra($file, "childComponents", $i);
 //                        if($i !== FALSE && ($file[$i] == " " || $file[$i] == "|")){
 //                            $i++;
 //                            $i= $this->buscarYsaltar($file, $i, "}");

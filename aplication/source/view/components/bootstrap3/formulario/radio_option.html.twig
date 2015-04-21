@@ -1,0 +1,25 @@
+{% block beforehead %}{% endblock %}
+{% block body %}
+{% if config.inline == "no" %}
+<div class="radio">
+<label for="{{config.id}}">
+{% if config.checked == "si" %}
+<input type="radio" name="{{config.name}}" id="{{config.id}}" value="{{config.value}}" checked="checked">
+{% else %}
+<input type="radio" name="{{config.name}}" id="{{config.id}}" value="{{config.value}}">
+{% endif %}
+{{config.label}}
+</label>
+</div>
+{% else %}   
+<label class="radio-inline" for="{{config.id}}">
+{% if config.checked == "si" %}
+<input type="radio" name="{{config.name}}" id="{{config.id}}" value="{{config.value}}" checked="checked">
+{% else %}
+<input type="radio" name="{{config.name}}" id="{{config.id}}" value="{{config.value}}">
+{% endif %}
+{{config.label}}
+</label>
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

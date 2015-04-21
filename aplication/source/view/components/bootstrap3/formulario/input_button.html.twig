@@ -1,0 +1,15 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+<div class="input-group">
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{% if config.buttonAfter == "si" %}<input class="form-control input-{{config.size}}" type="{{config.inputType}}" id="{{config.inputId}}" name="{{config.name}}" placeholder="{{config.placeholder}}" value="{{config.value}}">{% endif %}
+<span class="input-group-btn"><button class="btn btn-{{config.buttonStyle}} btn-{{config.size}}" type="button" id="{{config.buttonId}}" onclick="{{config.onclick}}">{{config.labelButton}}</button></span>
+{% if config.buttonAfter == "no" %}<input class="form-control input-{{config.size}}" type="{{config.inputType}}" id="{{config.inputId}}" name="{{config.name}}" placeholder="{{config.placeholder}}" value="{{config.value}}">{% endif %}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}   
+</div>
+{% endblock %}
+{% block afterfoot %}{% endblock %}

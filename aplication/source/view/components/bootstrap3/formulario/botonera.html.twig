@@ -1,0 +1,17 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<div class="form-group"><div class="col-md-offset-2 col-md-10">
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{{childComponents | raw}}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}    
+{% if config.seccion == null or config.seccion == "pie" %} 
+</div></div>
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

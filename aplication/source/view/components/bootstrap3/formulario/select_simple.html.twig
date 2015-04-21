@@ -1,0 +1,21 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+{% if config.multiple == "no" %}
+<select id="{{config.id}}" name="{{config.name}}" class="form-control input-{{config.size}}" onchange="{{config.onchange}}">
+{% else %}
+<select id="{{config.id}}" name="{{config.name}}" class="form-control input-{{config.size}}" onchange="{{config.onchange}}" multiple="multiple">
+{% endif %}           
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{{childComponents | raw}}   
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %} 
+{% if config.seccion == null or config.seccion == "pie" %} 
+</select>
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

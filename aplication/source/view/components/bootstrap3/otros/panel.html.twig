@@ -1,0 +1,17 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<div class="panel panel-default">
+{% if config.titulo != null %}<div class="panel-heading"><h3 class="panel-title">{{config.titulo}}</h3></div>{% endif %}
+<div class="panel-body">{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{{childComponents | raw}}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}
+{% if config.seccion == null or config.seccion == "pie" %}
+</div>{% if config.pie != null %}<div class="panel-footer">{{config.pie}}</div>{% endif %}</div>{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

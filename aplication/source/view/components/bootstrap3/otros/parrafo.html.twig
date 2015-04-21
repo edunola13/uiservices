@@ -1,0 +1,15 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<p class="{{config.lead}} text-{{config.align}}">
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{{childComponents | raw}}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %} 
+{% if config.seccion == null or config.seccion == "pie" %}</p>{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}

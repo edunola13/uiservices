@@ -9,6 +9,7 @@
  * Para que si haya un error devuelva error 500 y las APIs no muestren contenido erroneo
  */
     function _error_handler2($level, $message, $file, $line){
+        write_log($message, 'Level Error: '. $file. $line);
         set_estado_header(500);
         // No ejecutar el gestor de errores interno de PHP
         return true;      
@@ -18,7 +19,8 @@
             //Se podria agregar mas errores en el IF, ver set error handler en PHP para ver cuales no son manejados con esa funcion
             //Si no son manejados con esa funcion todos cierran el programa directamente
             if($e['type'] == E_ERROR || $e['type'] == E_PARSE || $e['type'] == E_STRICT){
-                set_estado_header(500);
+                write_log($e['message'], $e['type']);
+                //set_estado_header(500);
             }
         }        
     }    

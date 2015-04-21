@@ -1,0 +1,12 @@
+{% extends "components/bootstrap3/formulario/formulario.html.twig" %}
+{% block beforehead %}<div style="background-color: #eee; padding: 5px;">{% endblock %}
+{% block body %}
+<h2 class="">{{config.title}}</h2>
+<input type="text" class="form-control" placeholder="{{config.user.placeholder}}" name="{{config.user.name}}" value="{{config.user.value}}" required autofocus>
+<input type="password" class="form-control" placeholder="{{config.pass.placeholder}}" name="{{config.pass.name}}" required>
+<div class="checkbox">
+<label><input type="checkbox" name="{{config.check.name}}" value="{{config.check.value}}"> {{config.check.label}}</label>
+</div>
+<button class="btn btn-lg btn-primary btn-block" type="submit">{{config.labelButton}}</button>
+{% endblock %}        
+{% block afterfoot %}</div>{% endblock %}

@@ -29,9 +29,10 @@ class ComponenteService extends En_Controller{
          * Devuelve el codigo de todos los componentes
          */
         $hijos= NULL;
-        if(isset($componente["componentes"])){
-            $hijos= $this->armarComponentes($componente["componentes"]);
+        if(isset($componente["childComponents"])){
+            $hijos= $this->armarComponentes($componente["childComponents"]);
         }
+        $componentes= "";
         if(isset($componente["nombre"])){
             $componentes= component('ui_component', array("componente" => $componente, "hijos" => $hijos));
         }
@@ -55,9 +56,9 @@ class ComponenteService extends En_Controller{
         foreach ($componentes as $componente) {
             $componentesHijos= NULL;
             //Para cada componente analizo si tiene mas componentes
-            if(isset($componente["componentes"])){
+            if(isset($componente["childComponents"])){
                 //Si tiene mas componentes los llamo para que me devuelva la rta
-                $componentesHijos= $this->armarComponentes($componente["componentes"]);
+                $componentesHijos= $this->armarComponentes($componente["childComponents"]);
             }
             //Ejecuto el componente actual para que devuelva su rta con la rta de sus componentes
             $rtaComponentes .= component('ui_component', array("componente" => $componente, "hijos" => $componentesHijos));

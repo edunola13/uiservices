@@ -1,0 +1,24 @@
+{% block beforehead %}{% endblock %}
+{% block head %}
+{% if config.seccion == null or config.seccion == "cabecera" %}
+<div class="media">
+<a class="pull-left" href="{{config.href}}">
+<img class="media-object" alt="{{config.alt}}" src="{{config.src}}">
+</a>
+<div class="media-body">
+<h4 class="media-heading">{{config.titulo}}</h4>
+{{config.contenido}}
+<div class="hijos-media media">
+{% endif %}
+{% endblock %}
+{% block beforebody %}{% endblock %}
+{% block body %}
+{{childComponents | raw }}
+{% endblock %}
+{% block afterbody %}{% endblock %}
+{% block foot %}
+{% if config.seccion == null or config.seccion == "pie" %} 
+</div></div></div>
+{% endif %}
+{% endblock %}
+{% block afterfoot %}{% endblock %}
