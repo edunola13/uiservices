@@ -52,5 +52,3 @@ class Config {
         return $this->projects[$this->nameActualProject];
     }
 }
-
-?>
