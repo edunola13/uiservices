@@ -1,196 +1,276 @@
 <?php
-    /*
-     * Realiza la configuracion completa del sistema y empieza a delegar el requerimiento del cliente a los modulos del
-     * framework y a los del cliente
-     */
-    /*
-     * Lee archivo configuracion.json donde se encuentra toda la configuracion de variables, filtros, controladores, 
-     * librerias, helpers, etc.
-     */
-    $json_configuration= file_get_contents($path_aplication . 'configuration.json');
-    $config= json_decode($json_configuration, true);    
-    if(! is_array($config)){
-        //Arma una respuesta de error de configuracion.
-        //No realiza el llamado a funcions de error porque todavia no se cargo el modulo de errores
-        $head= 'Configuration Error';
-        $message= 'The file configuration.json is not available or is misspelled';
-        require $path_aplication . 'errors/general_error.php';
-        //Cierra la aplicacion
-        exit;
-    }    
-    //Define si muestra o no los errores y en que nivel de detalle dependiendo en que fase se encuentre la aplicacion
-    switch ($config['environment']){
-        case 'development':
-            error_reporting(E_ALL);
-            define('ERROR', 'todos');
-            break;	
-        case 'production':
-            error_reporting(0);
-            define('ERROR', 'ninguno');
-            break;
-        default:
-            //No realiza el llamado a funcion de error porque todavia no se cargo el modulo de errores
-            $head= 'Configuration Erron';
-            $message= 'The environment is not defined in configuration.json';
-            require $path_aplication . 'errors/general_error.php';
-            exit;
-    }    
-    //Carga la clase Rendimiento
-    require $path_framework . 'classes/Performance.php';
-    //Analiza si calcula el tiempo que tarda la aplicacion en ejecutarse
-    $performance= NULL;
-    if($config['calculate_performance'] == 'TRUE' || $config['calculate_performance'] == 'true'){
-        //Incluye la clase Rendimiento 
-        $performance= new Performance();
-        $performance->start();
-    }	
-    //Seteo la codificacion de caracteres, casi siempre es o debe ser UTF-8
-    ini_set('default_charset', $config['charset']);   
+namespace Enola;
+use Enola\Error;
 
-    // Define las constantes del sistema
-    // BASE_URL: Base url de la aplicacion - definida por el usuario en el archivo de configuracion    
-    $pos= strlen($config['base_url']) - 1;
-    if($config['base_url'][$pos] != '/'){
-        $config['base_url'] .= '/';
+//Carga el setup de la aplicacion
+include $path_application . 'setup.php';
+//Tiempo de Inicio de la aplicación
+$timeBegin= microtime(TRUE);
+require $path_framework . 'EnolaContext.php';
+
+//Instancio la Clase EnolaContext que carga la configuracion de la aplicacion
+$context= new \EnolaContext($path_root, $path_framework, $path_application, $configurationType, $configurationFolder, $charset, $timeZone, $cache);
+//Una vez realizada la carga de la configuracion empieza a trabajar el core del Framework
+$app= new Application($context);
+
+//Seteo el caluclo de la performance, si corresponde
+$app->initPerformance($timeBegin);
+
+//Ejecuto el requerimiento actual
+$app->request();
+
+/**
+ * Esta clase representa el Nucleo del framework. En esta se cuentra la funcionalidad principal del framework
+ * En su instanciacion cargara todos los modulos de soporte, librerias definidas por el usuario y demas comportamiento
+ * sin importar el tipo de requerimiento.
+ * Mediante el metodo request atendera el requerimiento actual donde segun el tipo del mismo cargara los modulos principales
+ * correspondientes y les cedera el control a cada uno como corresponda.
+ * Permite la administracion de variables de tipo aplicacion mediante la cache. 
+ * @author Eduardo Sebastian Nola <edunola13@gmail.com>
+ * @category Enola
+ * @internal
+ */
+class Application{
+    /** @var \EnolaContext */
+    public $context;
+    /** @var Cache\CacheInterface */
+    public $cache;
+    private $prefixApp= 'APP';
+    
+    /** @var Http\HttpCore */
+    public $httpCore;
+    /** @var Component\ComponentCore */
+    public $componentCore;
+    /** @var Cron\CronCore */
+    public $cronCore;
+    
+    /** @var Support\DependenciesEngine */
+    public $dependenciesEngine;
+
+    /** @var Support\Performance */
+    private $performance;
+    /**
+     * Constructor - Ejecuta metodo init
+     * @param EnolaContext $context
+     */
+    public function __construct($context) {
+        $this->context= $context;
+        $this->context->app= $this;
+        $this->init();
     }
-    define('BASEURL', $config['base_url']);    
-	//ENVIRONMENT: Indica el ambiente de la aplicacion
-	define('ENVIRONMENT', $config['environment']);
-    //CONFIGURATION: carpeta base de configuracion - definida por el usuario en el archivo de configuracion
-    define('CONFIGURATION', $config['configuration']);    
-    //JSON_CONFIG_BD: archivo de configuracion para la base de datos
-    //Si el usuario definio que va a tener bd, en el archivo de configuracion guarda el archivo de configuracion de la BD
-    if(isset($config['database']['configuration'])){
-        define('JSON_CONFIG_BD', $config['database']['configuration']);
+    /**
+     * Destructor - Termina el calculo de performance
+     */
+    public function __destruct() {
+        //Termino e imprimo el calculo de la performance, si corresponde
+        $this->displayPerformance();
     }    
-    //URL_COMPONENT: URL con la cual se deben mapear los controladores
-    define('URL_COMPONENT', $config['url-components']);    
-    // PATHFRA: direccion de la carpeta de la aplicacion - definida en index.php
-    define('PATHFRA', $path_framework);    
-    // PATHAPP: direccion de la carpeta de la aplicacion - definida en index.php
-    define('PATHAPP', $path_aplication);         
-    /*
-     * Creacion de variables globales
-     */    
-    //Creo variable global con la configuracion de Internacionalizacion
-    if(isset($config['i18n'])){
-        $GLOBALS['i18n']= $config['i18n'];
+    /**
+     * Responde al requerimiento analizando el tipo del mismo, HTTP,CLI,COMPONENT,ETC.
+     */
+    public function request(){ 
+        //Cargo el modulo correspondiente en base al tipo de requerimiento
+        if(ENOLA_MODE == 'HTTP'){
+            //Cargo el modulo Http
+            $this->loadHttpModule();
+        }else{
+            //Cargo el modulo Cron
+            $this->loadCronModule();
+        }
+        //Cargo el modulo Component
+        $this->loadComponentModule();
+        //Cargo la configuracion del usuario
+        $this->loadUserConfig();
+        //Analizo si estoy en modo HTTP o CLI
+        if(ENOLA_MODE == 'HTTP'){
+            //Analizo la ejecucion de componente via URL - Veo si hay componentes y si alguno mapea
+            if($this->componentCore != NULL && $this->componentCore->mapsComponents($this->httpCore->httpRequest)){
+                //Ejecuto el componente via URL
+                $this->componentCore->executeUrlComponent($this->httpCore->httpRequest);
+            }else{
+                //Ejecuto el controlador correspondiente
+                $this->httpCore->executeHttpRequest();
+            }
+        }else{
+            //Ejecuta el cron controller
+            $this->cronCore->executeCronController();
+        }        
     }    
-    //Creo la variable global con la configuracion de librerias
-    $GLOBALS['libraries_file']= $config['libraries'];    
-    /*
-     * Carga de modulos obligatorios para que el framework trabaje correctamente
-     */    
-    //Carga del modulo errores
-    require PATHFRA . 'modules/errors.php';
-    //Define un manejador de excepciones - definido en el modulo errores
-    set_error_handler('_error_handler');
-    //Define un manejador de fin de cierre - definido en el modulo de errores
-    register_shutdown_function('_shutdown');         
-    //Carga de modulo URL-URI
-    require PATHFRA . 'modules/url_uri.php';
-    //Define la uri de la aplicacion y la setea como una variable estatica
-    define_application_uri();        
-    //Carga de modulo para carga de archivos
-    require PATHFRA . 'modules/load_files.php';
-    //Carga de modulo con funciones para la vista
-    require PATHFRA . 'modules/view.php';
-    //Carga de modulo de seguridad
-    require PATHFRA . 'modules/security.php';
-    //Carga Clase Base Enola
-    require PATHFRA . 'classes/Enola.php';  
-    //Carga Clase En_DataBase
-    require PATHFRA . 'classes/En_DataBase.php';    
-    /*
-     * Analiza el paso de un error HTTP
+    /**
+     * Realiza la carga de modulos, librerias y soporte que necesita el framework para su correcto funcionamiento
+     * sin importar el tipo de requerimiento (HTTP, COMPONENT, CLI, Etc).
      */
-    catch_server_error();
-    /*
-     * Fin
-     */    
-    /*
-     * Cargo todas las librerias particulares de la aplicacion que se cargaran automaticamente indicadas en el archivo de configuracion
+    private function init(){        
+        //Realizo la carga de modulos de soporte
+        $this->supportModules();
+        //Instancio el sistema de Cache
+        $this->cache= new Cache\Cache();
+        //Enolacontext->init(): Cargo las configuraciones de contexto faltante
+        $this->context->init();
+        //Instancio el motor de Dependencias
+        $this->dependenciesEngine= new Support\DependenciesEngine();              
+        //Cargo las librerias definidas por el usuario
+        $this->loadLibraries();        
+    }    
+    /**
+     * Carga de modulos de soporte para que el framework trabaje correctamente
+     */ 
+    protected function supportModules(){           
+        //Carga del modulo errores - se definen manejadores de errores
+        require $this->context->getPathFra() . 'supportModules/Errors.php';    
+        //Carga de modulo para carga de archivos
+        require $this->context->getPathFra() . 'supportModules/load_files.php';
+        //Carga de modulo con funciones para la vista
+        require $this->context->getPathFra() . 'supportModules/View.php';
+        //Carga de modulo de seguridad
+        require $this->context->getPathFra() . 'supportModules/Security.php';
+        //Carga la clase Performance
+        require $this->context->getPathFra() . 'supportModules/Performance.php';
+        //Carga Clase Base Loader
+        require $this->context->getPathFra() . 'supportModules/genericClass/GenericLoader.php';
+        //Carga Trait de funciones Comunes
+        require $this->context->getPathFra() . 'supportModules/genericClass/GenericBehavior.php';
+        //Carga Clase Base Requerimiento
+        require $this->context->getPathFra() . 'supportModules/genericClass/Request.php';
+        //Carga Clase Base Response
+        require $this->context->getPathFra() . 'supportModules/genericClass/Response.php';
+        //Cargo el modulo DataBase
+        require $this->context->getPathFra() . 'supportModules/DataBaseAR.php';
+        //Carga el modulo Cache
+        require $this->context->getPathFra() . 'supportModules/Cache.php';
+        //Carga el motor de Dependencias
+        require $this->context->getPathFra() . 'supportModules/DependenciesEngine.php';        
+    }      
+    /**
+     * Carga todas las librerias particulares de la aplicacion que se cargaran automaticamente indicadas en el archivo de configuracion
      */
-    //Leo las librerias de la variable config
-    $archivos_librerias_a= $config['libraries'];
-    //Recorro de a una las librerias y las importo
-    foreach ($archivos_librerias_a as $libreria) {
-        //$libreria['class'] tiene la direccion completa desde LIBRARIE, no solo el nombre
-        $dir= $libreria['class'];
-        import_librarie($dir);
+    protected function loadLibraries(){
+        //Import el archivo autload de composer si se indico el mismo
+        if($this->context->isAutoloadDefined()){
+            require_once $this->context->getPathRoot() . 'vendor/' . $this->context->getComposerAutoload();
+        }        
+        //Recorro de a una las librerias, las importo
+        foreach ($this->context->getLibrariesDefinition() as $libreria) {
+            //$libreria['class'] tiene la direccion completa desde LIBRARIE, no solo el nombre
+            $dir= $libreria['path'];
+            import_librarie($dir);
+        }
+    }
+    /**
+     * Carga e inicializa el modulo HTTP
+     */
+    protected function loadHttpModule(){
+        //Analiza el paso de un error HTTP
+        Error::catch_server_error();
+        //Cargo el modulo HTTP e instancio el Core que se encarga de crear el HttpRequest que representa el requerimiento HTTP
+        require $this->context->getPathFra() . 'http/http.php';
+        $this->httpCore= new Http\HttpCore($this);
+    }
+    /**
+     * Carga el modulo cron y ejecuta el Cron correspondiente
+     * @global array $argv
+     * @global array $argc
+     */
+    protected function loadCronModule(){
+        //Consigo las variables globales para linea de comandos
+        global $argv, $argc;
+        //Analizo si se pasa por lo menos un parametros (nombre cron), el primer parametros es el nombre del archivo y el segundo en nombre de la clase
+        //pregunta por >= 2
+        if($argc >= 2){
+            require $this->context->getPathFra() . 'cron/cron.php';
+            $this->cronCore= new Cron\CronCore($this, $argv);            
+        }else{
+            Error::general_error('Cron Controller', 'There isent define any cron controller name');
+        }    
+    }
+    /**
+     * Carga el modulo Component si se definido por lo menos un component
+     */
+    protected function loadComponentModule(){
+        //Analizo la carga del modulo component segun si hay o no definiciones
+        if(count($this->context->getComponentsDefinition())){            
+            //Cargo el modulo componente e instancia el Core
+            require $this->context->getPathFra() . 'component/component.php';
+            $this->componentCore= new Component\ComponentCore($this,$this->getRequest(),$this->getResponse());
+        }
+    }       
+    /**
+     * Despues de la carga inicial y las libreria permite que el usuario realice su propia configuracion
+     * Antes de atender el requerimiento HTTP o CLI
+     */
+    protected function loadUserConfig(){
+        require $this->context->getPathApp() . 'load_user_config.php';    
+    }  
+    /**
+     * Si corresponde:
+     * Inicializa el calculo del tiempo de respuesta
+     */
+    public function initPerformance($timeBegin = NULL){        
+        //Analiza si calcula el tiempo que tarda la aplicacion en ejecutarse
+        $this->performance= NULL;
+        if($this->context->CalculatePerformance()){
+            //Incluye la clase Rendimiento 
+            $this->performance= new Support\Performance($timeBegin);
+        }
+    }    
+    /**
+     * Si corresponde:
+     * Finaliza el calculo del tiempo de respuesta e imprime el resultado
+     */
+    public function displayPerformance(){
+        if($this->performance != NULL){
+            $this->performance->terminate();
+            $mensaje= 'The execution time of the APP is: ' . $this->performance->elapsed() . ' seconds';
+            $titulo= 'Performance';
+            //Muestra la informacion al usuario
+            Error::display_information($titulo, $mensaje);
+        }
     }
     
     /**
-     * Configuracion Inicial: Despues de la carga inicial y las libreria permite que el usuario realice su propia configuracion
-     * Antes de atender el requerimiento HTTP 
+     * Retorna el Requerimiento actual
+     * @return Support\Request
      */
-    require PATHAPP . 'load_user_config.php';    
-    
-    /*
-     * Cargo el modulo HTTP 
-     */
-    require PATHFRA . 'modules/http.php';
-    
-    /*
-     * Almacena la definicion de componentes en una variable global y analiza si carga el modulo componente
-     */    
-    //Leo las componentes de la variable config y analizo todo lo respectivo a ellas
-    $componentes= $config['components'];
-    if(count($componentes) > 0){
-        //La guarda como global para que luego pueda ser utilizada
-        $GLOBALS['components']= $componentes;
-        //Cargo el modulo componente
-        require PATHFRA . 'modules/component.php';
-		//Analiza si se ejecuta un componente via URL
-		if(maps_components()){
-			execute_url_component();
-			//Termina la ejecucion
-			exit;
-		}
+    public function getRequest(){
+        if($this->httpCore != NULL){
+            return $this->httpCore->httpRequest;
+        }else{
+            return $this->cronCore->cronRequest;
+        }
     }
-    
-    /*
-     * Lee los controladores de la variable config. En caso de que no haya controladores avisa del error
-     * Me quedo con el controlador que mapea
-     */
-    $controllers= $config['controllers'];
-    $actual_controller= NULL;
-    if(count($controllers) > 0){
-        $actual_controller= mapping_controller($controllers);
-    }
-    else{
-        general_error('Controller Error', 'There isent define any controller');
-    }
-    //Creo el HTTP REQUEST correspondiente en base a la URL que mapeo
-    create_request($actual_controller['url']);
-    /*
-     * Lee los filtros que se deben ejecutar antes del procesamiento de la variable config y delega trabajo a archivo filtros.php
-     * En caso de que no haya filtros asignados no delega ningun trabajo
-     */
-    $filtros= $config['filters'];
-    if(count($filtros) > 0){
-        execute_filters($filtros);
-    }        
     /**
-     *Ejecuto el controlador correspondiente 
+     * Retorna el Response actual
+     * @return Support\Response
      */
-    execute_controller($actual_controller);
-    /**
-     * Lee los filtros que se deben ejecutar despues del procesamiento de la variable config y delega trabajo a archivo filtros.php
-     * En caso de que no haya filtros asignados no delega ningun trabajo
-     */
-    $filtros_despues= $config['filters_after_processing'];
-    if(count($filtros_despues) > 0){
-        execute_filters($filtros_despues);
-    }     
-    /*
-     * Si se esta calculando el tiempo, realiza el calculo y envia la respuesta
-     */
-    if($performance != NULL){
-        $performance->terminate();
-        $mensaje= 'The execution time of the APP is: ' . $performance->elapsed();
-        $titulo= 'Performance';
-        //Muestra la informacion al usuario
-        display_information($titulo, $mensaje);
+    public function getResponse(){
+        if($this->httpCore != NULL){
+            return $this->httpCore->httpResponse;
+        }else{
+            return $this->cronCore->cronResponse;
+        }
     }
-?>
+    /**
+     * Devuelve un atributo en cache a nivel aplicacion. Si no existe devuelve NULL.
+     * @param string $key
+     * @return data
+     */
+    public function getAttribute($key){
+        return $this->cache->get($this->prefixApp . $key);
+    }
+    /**
+     * Guarda un atributo en cache a nivel aplicacion. Por tiempo indefinido.
+     * @param string $key
+     * @param data $value
+     */
+    public function setAttribute($key, $value){
+        return $this->cache->store($this->prefixApp . $key, $value);
+    }
+    /**
+     * Elimina un atributo en cache a nivel aplicacion.
+     * @param string $key
+     * @return boolean
+     */
+    public function deleteAttribute($key){
+        return $this->cache->delete($this->prefixApp . $key);
+    }
+}
