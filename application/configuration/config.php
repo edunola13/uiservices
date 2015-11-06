@@ -10,6 +10,7 @@ $config['controllers']= array(
         'class' => 'Index',
         'url' => '/'
     ),
+    
     'uidefinition-component' => array(
         'class' => 'uidefinition/Component',
         'url' => 'uidefinition/component/(project)/(name)'
@@ -17,6 +18,32 @@ $config['controllers']= array(
     'uidefinition-server' => array(
         'class' => 'uidefinition/Server',
         'url' => 'uidefinition/server/(api)'
+    ),
+    
+    'uiprint-component' => array(
+        'class' => 'uiprint/Component',
+        'url' => 'uiprint/component/(project)'
+    ),
+    'uiprint-theme' => array(
+        'class' => 'uiprint/Theme',
+        'url' => 'uiprint/theme/(project)'
+    ),
+    'uiprint-theme2' => array(
+        'class' => 'uiprint/Theme',
+        'url' => 'uiprint/theme/(project)/(name)'
+    ),
+    'uiprint-javascript' => array(
+        'class' => 'uiprint/JavaScript',
+        'url' => 'uiprint/javascript/(project)'
+    ),
+    'uiprint-javascript2' => array(
+        'class' => 'uiprint/JavaScript',
+        'url' => 'uiprint/javascript/(project)/(name)'
+    ),
+    
+    'test' => array(
+        'class' => 'Test',
+        'url' => 'test'
     )
 );
       

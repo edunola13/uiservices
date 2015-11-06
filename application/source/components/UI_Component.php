@@ -18,16 +18,16 @@ class UI_Component extends Component\En_Component{
      * @return type 
      */
     public function rendering(Request $request, Response $response, $params = NULL) {
-        if(isset($params["componente"])){
+        if(isset($params["component"])){
             $this->injectDependency($this->context->app, 'twig', 'twig');
             //Imprime el componente con la configuracion y componentes(hijos) correspondientes
-            $componente= $params["componente"];
+            $componente= $params["component"];
             $config= NULL;
             if(isset($componente["configuracion"])){
                 $config= $componente["configuracion"];
             }
-            $componentesHijos= $params["hijos"];            
-            return $this->imprimir($componente["nombre"], $componentesHijos, $config);            
+            $childComponents= $params["sons"];            
+            echo $this->printComponent($componente["nombre"], $childComponents, $config);            
         }
         else{
             //Devuelve la definicion del componente para las APIs de los lenguajes
@@ -42,39 +42,36 @@ class UI_Component extends Component\En_Component{
         $this->twig= $twig;
     }
 
-
     /**
-     * Levanta la plantilla correspondiente de TWIG
-     * @param type $nombre
-     * @param type $hijos
+     * Ejecuta la plantilla correspondiente del componente de TWIG
+     * @param type $name
+     * @param type $sons
      * @param type $config
-     * @param type $datos
-     * @return type 
+     * @return string 
      */
-    protected function imprimir($nombre, $hijos, $config){
+    protected function printComponent($name, $sons, $config){
         $project= $this->config->actualProjectConfig();
-        $folderView= $project['components'][$nombre] . '/';
+        $folderView= $project['components'][$name] . '/';
         //Le quito el "/" en caso de que no haya carpeta
         $folderView= ltrim($folderView, '/');
         $base= $project['base'];
-        return $this->twig->render("components/" . $base . '/' . $folderView . $nombre . ".html.twig", array("childComponents" => $hijos, "config" => $config));
-    }
-    
+        return $this->twig->render("components/" . $base . '/' . $folderView . $name . ".html.twig", array("childComponents" => $sons, "config" => $config));
+    }    
     /**
      * Arma la definicion del componente
-     * @param type $nombre
+     * @param type $name
      * @return string 
      */
-    protected function definition($nombre){
+    protected function definition($name){
         //Respuesta a devolver
         $html= "";
         //Cargo el archivo en un string
         $project= $this->config->actualProjectConfig();
-        $folderView= $project['components'][$nombre];
+        $folderView= $project['components'][$name];
         $base= $project['base'];
-        $file= file_get_contents(PATHAPP . "source/view/components/" . $base . '/' . $folderView . '/' . $nombre . ".html.twig");
+        $file= file_get_contents(PATHAPP . "source/view/components/" . $base . '/' . $folderView . '/' . $name . ".html.twig");
         //Analizo la herencia y armo los bloques en base a esta
-        $bloques= $this->herencia($file);
+        $bloques= $this->inheritance($file);
         //Recorro todos los bloques para armar la respuesta correcta
         foreach ($bloques as $cadena) {
             $i= 0;
@@ -87,14 +84,14 @@ class UI_Component extends Component\En_Component{
                     //Es mas 2 por tengo que saltar "{"
                     $i+= 2;
                     //Busca el primer caracter que no sea vacio
-                    $i= $this->saltarBlancos($cadena, $i);
+                    $i= $this->jumpSpaces($cadena, $i);
                     //Si encuentro la variable "hijos" la reemplazo por "components"
                     if($cadena[$i] == "c"){
-                        $i= $this->buscarPalabra($cadena, "childComponents", $i);
+                        $i= $this->findWord($cadena, "childComponents", $i);
                         if($i !== FALSE && ($cadena[$i] == " " || $cadena[$i] == "|")){
                             $i++;
-                            $i= $this->buscarYsaltar($cadena, $i, "}");
-                            $i= $this->buscar($cadena, $i, "}");
+                            $i= $this->findAndJump($cadena, $i, "}");
+                            $i= $this->find($cadena, $i, "}");
                             $agregar= FALSE;
                             $modificar= TRUE;
                         }
@@ -119,48 +116,46 @@ class UI_Component extends Component\En_Component{
         //Quito saltos de Lineas y demas
         $html = preg_replace("/\r\n+|\r+|\n+|\t+/i", " ", $html);
         return $html;
-    }
-    
+    }    
     /**
      * Armo la herencia del componente
      * Metodo recursivo que ira llamando a los respectivos padres para ir armando los blooques y luego sobreescribirlos
      * si corresponde. 
      * @param type $file
-     * @return bloques
+     * @return blocks
      */
-    private function herencia($file){
+    private function inheritance($file){
         $i= 0;
         $bloquesPadre= NULL;
         //Analizar herencia        
-        $i= $this->saltarBlancos($file, $i);
+        $i= $this->jumpSpaces($file, $i);
         if($file[$i] == "{" && $file[$i + 1] == "%"){
             $i+= 2;
-            $i= $this->saltarBlancos($file, $i);
-            $i= $this->buscarPalabra($file, "extends", $i);
+            $i= $this->jumpSpaces($file, $i);
+            $i= $this->findWord($file, "extends", $i);
             if($i !== FALSE && $file[$i] == " "){
-                $ini= $this->buscarYsaltar($file, $i, '"');
-                $fin= $this->buscar($file, $ini, '"');
+                $ini= $this->findAndJump($file, $i, '"');
+                $fin= $this->find($file, $ini, '"');
                 $archivo= substr($file, $ini, $fin - $ini);
                 $padreFile= file_get_contents(PATHAPP . "source/view/" . $archivo); 
-                $bloquesPadre= $this->herencia($padreFile);
+                $bloquesPadre= $this->inheritance($padreFile);
             }
         }
         if($bloquesPadre == NULL){
-            $bloques= $this->armarBloques($file);
+            $bloques= $this->buildBlocks($file);
         }
         else{
-            $bloques= $this->armarBloques($file, $bloquesPadre);
+            $bloques= $this->buildBlocks($file, $bloquesPadre);
         }
         return $bloques;
-    }
-    
+    }    
     /**
-     * Arma los bloques
+     * Arma los bloques en base a toda la herencia
      * @param type $file
-     * @param type $bloques
+     * @param type $blocks
      * @return type 
      */
-    private function armarBloques($file, $bloques = array()){
+    private function buildBlocks($file, $blocks = array()){
         $i= 0;
         $inicioBloque= 0;
         $finBloque= 0;
@@ -169,12 +164,12 @@ class UI_Component extends Component\En_Component{
             if($file[$i] == "{" && $file[$i + 1] == "%"){
                 $posInicio= $i;
                 $i+= 2;
-                $i= $this->saltarBlancos($file, $i);
+                $i= $this->jumpSpaces($file, $i);
                 if($file[$i] == "b"){
-                    $i= $this->buscarPalabra($file, "block", $i);
+                    $i= $this->findWord($file, "block", $i);
                     if($i !== FALSE){
-                        $nombreBloque= $this->nombreBloque($file, $i);
-                        $i= $this->buscarYsaltar($file, $i, "}");
+                        $nombreBloque= $this->blockName($file, $i);
+                        $i= $this->findAndJump($file, $i, "}");
                         $inicioBloque= $i;
                     }
                 }
@@ -188,8 +183,8 @@ class UI_Component extends Component\En_Component{
                         $i++;
                     }
                     if($palabra == "endblock"){
-                        $i= $this->buscarYsaltar($file, $i, "}");
-                        $bloques[$nombreBloque]= substr($file, $inicioBloque, $finBloque - $inicioBloque + 1);
+                        $i= $this->findAndJump($file, $i, "}");
+                        $blocks[$nombreBloque]= substr($file, $inicioBloque, $finBloque - $inicioBloque + 1);
                     }
                 }
             }
@@ -197,42 +192,39 @@ class UI_Component extends Component\En_Component{
                 $i++;
             }
         }
-        return $bloques;
-    }
-    
-    
+        return $blocks;
+    }    
     /**
      * Busca una palabra en un string desde una posicion
      * Retorna el numero de la posicion siguiente a la palbra si existe la misma o FALSE si no existe
      * @param type $file
-     * @param type $aBuscar
+     * @param type $toFind
      * @param type $from
      * @return boolean 
      */
-    private function buscarPalabra($file, $aBuscar, $from){
+    private function findWord($file, $toFind, $from){
         $i= $from;
         $palabra= $file[$i];
         $i++;
-        while($i < strlen($file) && strpos($aBuscar, $palabra . $file[$i]) !== FALSE){
+        while($i < strlen($file) && strpos($toFind, $palabra . $file[$i]) !== FALSE){
             $palabra .= $file[$i];
             $i++;
         }
-        if(strcmp($palabra, $aBuscar) == 0){
+        if(strcmp($palabra, $toFind) == 0){
             return $i;
         }
         else{
             return FALSE;
         }
     }
-
     /**
-     * Salto todos los blancos consecutivos que aparezcan en un string desde una posicion
+     * Salta todos los blancos consecutivos que aparezcan en un string desde una posicion
      * Retorna la posicion siguiente al ultimo blanco o FALSE si son todos blancos o se termina el string
      * @param type $file
      * @param type $from
      * @return boolean 
      */
-    private function saltarBlancos($file, $from){
+    private function jumpSpaces($file, $from){
         $i= $from;
         while($i < strlen($file) && $file[$i] == " "){
             $i++;
@@ -244,8 +236,13 @@ class UI_Component extends Component\En_Component{
             return FALSE;
         }
     }
-    
-    private function saltarBlancosDesdeAtras($file){
+    /**
+     * Salta todos los blancos consecutivos que aparezcan en un string desde el final
+     * Retorna la posicion siguiente al ultimo blanco o FALSE si son todos blancos o se termina el string
+     * @param type $file
+     * @return boolean
+     */
+    private function jumpSpacesFromBehind($file){
         $i= strlen($file) - 1;
         while($i > 0 && $file[$i] == " "){
             $i--;
@@ -256,58 +253,55 @@ class UI_Component extends Component\En_Component{
         else{
             return FALSE;
         }
-    }
-    
+    }    
     /**
      * Busca un caracter y lo salta
      * @param type $file
      * @param type $from
-     * @param type $caracter
+     * @param type $char
      * @return boolean 
      */
-    private function buscarYsaltar($file, $from, $caracter){
+    private function findAndJump($file, $from, $char){
         $i= $from;
-        while($i < strlen($file) && $file[$i] != $caracter){
+        while($i < strlen($file) && $file[$i] != $char){
             $i++;
         }
-        if($file[$i] == $caracter){
+        if($file[$i] == $char){
             $i++;
             return $i;
         }
         else{
             return FALSE;
         }
-    }
-    
+    }    
     /**
      * Encuentra un caracter y devuelve su ubicacion
      * @param type $file
      * @param type $from
-     * @param type $caracter
+     * @param type $char
      * @return boolean 
      */
-    private function buscar($file, $from, $caracter){
+    private function find($file, $from, $char){
         $i= $from;
-        while($i < strlen($file) && $file[$i] != $caracter){
+        while($i < strlen($file) && $file[$i] != $char){
             $i++;
         }
-        if($file[$i] == $caracter){
+        if($file[$i] == $char){
             return $i;
         }
         else{
             return FALSE;
         }
-    }
-    
+    }    
     /**
-     * Devuleve le nombre del bloque pasado
+     * Devuleve el nombre del bloque pasado
      * @param type $file
      * @param type $from
      * @return type 
      */
-    private function nombreBloque($file, $from){
+    private function blockName($file, $from){
         $i= $from;
-        $i= $this->saltarBlancos($file, $from);
+        $i= $this->jumpSpaces($file, $from);
         $ini= $i;
         while($i < strlen($file) && ($file[$i] != " " && $file[$i] != "%")){
             $i++;
@@ -330,7 +324,7 @@ class UI_Component extends Component\En_Component{
 //                $posInicio= $i;
 //                //Es mas 2 por tengo que saltar "%"
 //                $i+= 2;
-//                $i= $this->saltarBlancos($file, $i);
+//                $i= $this->jumpSpaces($file, $i);
 //                
 //                //Analizamos que caracter se encontro para buscar coincidencia
 //                switch ($file[$i]){
@@ -338,7 +332,7 @@ class UI_Component extends Component\En_Component{
 //                        $i= $this->buscarPalabra($file, "block", $i);
 //                        if($i !== FALSE && $file[$i] == " "){
 //                            $i++;
-//                            $i= $this->buscarYsaltar($file, $i, "}");
+//                            $i= $this->findAndJump($file, $i, "}");
 //                            $agregar= FALSE;
 //                        }                        
 //                        if($agregar){
@@ -347,10 +341,10 @@ class UI_Component extends Component\En_Component{
 //                        break;
 //                    case "e":
 //                        //Agregar extends
-//                        $i= $this->buscarPalabra($file, "endblock", $i);
+//                        $i= $this->findWord($file, "endblock", $i);
 //                        if($i !== FALSE && ($file[$i] == " " || $file[$i] == "%")){
 //                            $i++;
-//                            $i= $this->buscarYsaltar($file, $i, "}");
+//                            $i= $this->findAndJump($file, $i, "}");
 //                            $agregar= FALSE;
 //                        }                        
 //                        if($agregar){
@@ -371,13 +365,13 @@ class UI_Component extends Component\En_Component{
 //                    //Es mas 2 por tengo que saltar "{"
 //                    $i+= 2;
 //                    //Busca el primer caracter que no sea vacio
-//                    $i= $this->saltarBlancos($file, $i);
+//                    $i= $this->jumpSpaces($file, $i);
 //                    if($file[$i] == "h"){
-//                        $i= $this->buscarPalabra($file, "childComponents", $i);
+//                        $i= $this->findWord($file, "childComponents", $i);
 //                        if($i !== FALSE && ($file[$i] == " " || $file[$i] == "|")){
 //                            $i++;
-//                            $i= $this->buscarYsaltar($file, $i, "}");
-//                            $i= $this->buscarYsaltar($file, $i, "}");
+//                            $i= $this->findAndJump($file, $i, "}");
+//                            $i= $this->findAndJump($file, $i, "}");
 //                            $agregar= FALSE;
 //                            $modificar= TRUE;
 //                        }
@@ -401,5 +395,3 @@ class UI_Component extends Component\En_Component{
 //        }
 //        //Respuesta
 //        return $html;
-
-?>

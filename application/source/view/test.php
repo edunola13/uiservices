@@ -11,9 +11,9 @@
 </head>
 <body>    
     <div class="container">
-        <?php $var= $this->twig->render("componentes/bootstrap3/otros/carousel_item.html.twig", array("hijos" => $this->hijos, "config" => $this->config2, "datos" => $this->datos));?>
-        <?php $var2= $this->twig->render("componentes/bootstrap3/otros/carousel_item.html.twig", array("hijos" => $this->hijos, "config" => $this->config2, "datos" => $this->datos, 'state'=>'active'));?>
-        <?php echo $this->twig->render("componentes/bootstrap3/otros/carousel.html.twig", array("hijos" => $var . $var2, "config" => $this->config, "datos" => $this->datos));?>
+        <?php $var= $this->twig->render("components/bootstrap3/otros/carousel_item.html.twig", array("hijos" => $this->sons, "config" => $this->componentConfig2, "datos" => $this->datos));?>
+        <?php $var2= $this->twig->render("components/bootstrap3/otros/carousel_item.html.twig", array("hijos" => $this->sons, "config" => $this->componentConfig, "datos" => $this->datos, 'state'=>'active'));?>
+        <?php echo $this->twig->render("components/bootstrap3/otros/carousel.html.twig", array("hijos" => $var . $var2, "config" => $this->componentConfig, "datos" => $this->datos));?>
     </div>    
         
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
