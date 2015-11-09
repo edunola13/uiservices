@@ -11,9 +11,7 @@
 </head>
 <body>    
     <div class="container">
-        <?php $var= $this->twig->render("components/bootstrap3/otros/carousel_item.html.twig", array("hijos" => $this->sons, "config" => $this->componentConfig2, "datos" => $this->datos));?>
-        <?php $var2= $this->twig->render("components/bootstrap3/otros/carousel_item.html.twig", array("hijos" => $this->sons, "config" => $this->componentConfig, "datos" => $this->datos, 'state'=>'active'));?>
-        <?php echo $this->twig->render("components/bootstrap3/otros/carousel.html.twig", array("hijos" => $var . $var2, "config" => $this->componentConfig, "datos" => $this->datos));?>
+        <?php echo $this->twig->render("components/bootstrap3/formulario/formulario.html.twig", array("config" => $configForm)); ?>
     </div>    
         
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

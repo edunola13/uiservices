@@ -43,7 +43,7 @@ $config['controllers']= array(
     
     'test' => array(
         'class' => 'Test',
-        'url' => 'test'
+        'url' => 'test/*'
     )
 );
       
